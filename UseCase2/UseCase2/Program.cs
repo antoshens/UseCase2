@@ -1,3 +1,4 @@
+using UseCase2.Middlewares;
 using UseCase2.Models;
 
 var builder =  WebApplication.CreateBuilder(args);
@@ -31,6 +32,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();
 

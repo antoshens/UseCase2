@@ -13,7 +13,7 @@ namespace UseCase2.Controllers
             StripeConfiguration.ApiKey = stripeConfig.ApiKey;
         }
 
-        [HttpGet("balance")]
+        [HttpGet("Balance")]
         public IActionResult GetBalance()
         {
             try
@@ -32,9 +32,36 @@ namespace UseCase2.Controllers
             {
                 return StatusCode((int)ex.HttpStatusCode, ex.Message);
             }
-            catch (Exception ex)
+        }
+
+        [HttpGet("BalanceTransactions")]
+        public ActionResult<StripeBalanceResponse> GetBalance(string startingAfter, int? take)
+        {
+            try
             {
-                return BadRequest($"An error occurred: {ex.Message}");
+                var balanceTransactionService = new BalanceTransactionService();
+                var options = new BalanceTransactionListOptions
+                {
+                    Limit = take ?? 10,
+                    StartingAfter = startingAfter
+                };
+
+                var balanceTransactions = balanceTransactionService.List(options);
+
+                return new StripeBalanceResponse
+                {
+                    Status = "Success",
+                    Message = "Balance Retrieved",
+                    Data = balanceTransactions
+                };
+            }
+            catch (StripeException e)
+            {
+                return new StripeBalanceResponse
+                {
+                    Status = "Error",
+                    Message = e.Message
+                };
             }
         }
     }
