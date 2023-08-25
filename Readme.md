@@ -11,7 +11,7 @@ A suitable IDE like Visual Studio or VS Code
 
 Clone the Repository:
 ``` bash
-git clone [repository-url]
+git clone https://github.com/antoshens/UseCase2
 ```
 
 Navigate to the Project Directory:
@@ -34,16 +34,16 @@ Your application should now be running locally at https://localhost:7263 (or the
 
 ### Using the Endpoints
 *Fetch Balance*:
-**URL**: http://localhost:5000/api/Stripe/Balance
-**Method**: GET
-**Description**: This endpoint returns the balance details tied to the Stripe account.
+1. URL: http://localhost:5000/api/Stripe/Balance
+2. Method: GET
+3. Description: This endpoint returns the balance details tied to the Stripe account.
 
 *Fetch Balance Transactions*:
-**URL**: http://localhost:5000/api/Stripe/BalanceTransactions?startingAfter=txn_123456&take=5
-**Method**: GET
-**Parameters**:
-	*startingAfter*: The ID of the last transaction on the previous page (used for pagination).
-	*take*: Number of transactions to fetch. If not specified, defaults to 10.
-**Description*: This endpoint returns a list of balance transactions with optional parameters for pagination and the number of records.
+1. URL: http://localhost:5000/api/Stripe/BalanceTransactions?startingAfter=txn_123456&take=5
+2. Method: GET
+3. Parameters:
+	- *startingAfter*: The ID of the last transaction on the previous page (used for pagination).
+	- *take*: Number of transactions to fetch. If not specified, defaults to 10.
+4. Description: This endpoint returns a list of balance transactions with optional parameters for pagination and the number of records.
 
 Always remember to check the application's documentation or codebase for any additional configuration or endpoints. Happy coding!
