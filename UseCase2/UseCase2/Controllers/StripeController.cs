@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using UseCase2.Models;
+using UseCase2.Services.Interfaces;
 
 namespace UseCase2.Controllers
 {
@@ -8,18 +9,22 @@ namespace UseCase2.Controllers
     [ApiController]
     public class StripeController : ControllerBase
     {
-        public StripeController(StripeConfigurationOptions stripeConfig)
+        private readonly IBalanceService _balanceService;
+        private readonly IBalanceTransactionService _balanceTransactionService;
+
+        public StripeController(StripeConfigurationOptions stripeConfig, IBalanceService balanceService, IBalanceTransactionService balanceTransactionService)
         {
             StripeConfiguration.ApiKey = stripeConfig.ApiKey;
+            _balanceService = balanceService;
+            _balanceTransactionService = balanceTransactionService;
         }
 
         [HttpGet("Balance")]
-        public IActionResult GetBalance()
+        public ActionResult<Balance> GetBalance()
         {
             try
             {
-                var balanceService = new BalanceService();
-                var balance = balanceService.Get();
+                var balance = _balanceService.Get();
 
                 if (balance != null)
                 {
@@ -35,18 +40,17 @@ namespace UseCase2.Controllers
         }
 
         [HttpGet("BalanceTransactions")]
-        public ActionResult<StripeBalanceResponse> GetBalance(string startingAfter, int? take)
+        public ActionResult<StripeBalanceResponse> GetBalanceTransactions(string startingAfter, int? take)
         {
             try
             {
-                var balanceTransactionService = new BalanceTransactionService();
                 var options = new BalanceTransactionListOptions
                 {
                     Limit = take ?? 10,
                     StartingAfter = startingAfter
                 };
 
-                var balanceTransactions = balanceTransactionService.List(options);
+                var balanceTransactions = _balanceTransactionService.List(options);
 
                 return new StripeBalanceResponse
                 {

@@ -1,5 +1,7 @@
 using UseCase2.Middlewares;
 using UseCase2.Models;
+using UseCase2.Services;
+using UseCase2.Services.Interfaces;
 
 var builder =  WebApplication.CreateBuilder(args);
 
@@ -48,4 +50,7 @@ void RegisterServices(IServiceCollection services, IConfiguration config)
     {
         ApiKey = stripeConfig.GetValue<string>("ApiKey"),
     });
+
+    services.AddScoped<IBalanceService, BalanceService>();
+    services.AddScoped<IBalanceTransactionService, BalanceTransactionService>();
 }
